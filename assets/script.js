@@ -38,6 +38,6 @@ nextArrow.addEventListener("click", nextSlide);
 
 // Restrictions du click droit
 bannerContainer.addEventListener("contextmenu", (event) => {
-    console.log("right click is not allowed here")
+    console.log("right click is not allowed there")
 	event.preventDefault()
 })
