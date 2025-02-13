@@ -19,5 +19,6 @@ Il s'agit de dynamiser, via l'ajout d'un carousel d'images, l'accueil du site Pr
 ## Règles
 - L'image et la TagLine changent au click sur les fleches
 - les dots sont créés dynamiquement selon le nombre d'images
+- (option personnelle : les dots sont cliquables et permettent également de naviguer dans le slideshow)
 - Le slideshow boucle sur un retour à la première image
 

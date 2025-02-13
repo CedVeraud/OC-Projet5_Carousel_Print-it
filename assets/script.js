@@ -20,16 +20,30 @@ const slides = [
 //-- SELECTORS
 const bannerContainer = document.getElementById("banner")
 const bannerImg = document.querySelector(".banner-img")
+const tagLine = document.querySelector("#banner p")
 const dotsContainer = document.querySelector('.dots')
 const prevArrow = document.querySelector(".arrow_left")
 const nextArrow = document.querySelector(".arrow_right")
 
 //-- INDEX
-let currentSlide = 2
+let currentSlide = 0
 
-//-- 
+//-- SLIDES
+function updateSlide(index) {    
+    const slide = slides[index]
+    bannerImg.src = `./assets/images/slideshow/${slide.image}`
+    tagLine.innerHTML = slide.tagLine
+	
+	const dots = dotsContainer.querySelectorAll(".dot")
+	dots.forEach((dot, dotIndex) => {
+		if (dotIndex === index) {
+			dot.classList.add("dot_selected")			
+		} else {
+			dot.classList.remove("dot_selected")
+		}
+	}) 
+} 
 
-//-- DOTS
 // create DOTS
 function createDots() {
 	for (let i=0; i < slides.length; i++) {
@@ -42,30 +56,31 @@ function createDots() {
 }
 createDots() //
 
-// selected DOT
-function selectedDot() {
-	const dotElements = document.querySelectorAll('.dot')
-	dotElements.forEach((dot, index) =>  {
-		dot.classList.toggle('dot_selected', index === currentSlide)
-	})
-}
-selectedDot() //
-
-// click DOT
-function clickDot() {
-	console.log("dot")
-}
-// PREVIOUS Slide
-function prevSlide() {
-	console.log("prev")
-}
-// NEXT Slide
+// next Slide
 function nextSlide() {
-	console.log("next")
+    currentSlide = (currentSlide + 1) % slides.length
+    updateSlide(currentSlide)
 }
 
-// LISTENERS
-dotsContainer.addEventListener("click", clickDot)
+// prev Slide
+function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length
+    updateSlide(currentSlide)
+}
+
+// !! click on dots - A REVOIR, NE FONCTIONNE PAS !!
+function dotSlide() {
+	for (let i=0; i < slides.length; i++) {
+			updateSlide(i)
+			console.log('hey')
+		}  
+	
+}
+// DOTS LISTENER
+const dotElements = document.querySelector('.dots')
+dotElements.addEventListener("click", dotSlide)
+
+// ARROWS LISTENERS
 prevArrow.addEventListener("click", prevSlide)
 nextArrow.addEventListener("click", nextSlide)
 
@@ -75,4 +90,4 @@ bannerContainer.addEventListener("contextmenu", (event) => {
 	event.preventDefault()
 })
 
-//
+updateSlide(currentSlide) // 
