@@ -17,27 +17,62 @@ const slides = [
 	}
 ]
 
-// VARIABLES
-const bannerContainer = document.getElementById("banner");
-const prevArrow = document.querySelector(".arrow_left");
-const nextArrow = document.querySelector(".arrow_right");
+//-- SELECTORS
+const bannerContainer = document.getElementById("banner")
+const bannerImg = document.querySelector(".banner-img")
+const dotsContainer = document.querySelector('.dots')
+const prevArrow = document.querySelector(".arrow_left")
+const nextArrow = document.querySelector(".arrow_right")
 
-// Diapositive précédente
+//-- INDEX
+let currentSlide = 2
+
+//-- 
+
+//-- DOTS
+// create DOTS
+function createDots() {
+	for (let i=0; i < slides.length; i++) {
+		let dotElement = document.createElement("a")
+		dotElement.href = '#'
+		dotElement.classList.add("dot")
+
+		dotsContainer.appendChild(dotElement)
+	}
+}
+createDots() //
+
+// selected DOT
+function selectedDot() {
+	const dotElements = document.querySelectorAll('.dot')
+	dotElements.forEach((dot, index) =>  {
+		dot.classList.toggle('dot_selected', index === currentSlide)
+	})
+}
+selectedDot() //
+
+// click DOT
+function clickDot() {
+	console.log("dot")
+}
+// PREVIOUS Slide
 function prevSlide() {
 	console.log("prev")
 }
-
-// Diapositive suivante
+// NEXT Slide
 function nextSlide() {
 	console.log("next")
 }
 
-// clicks sur les flèches gauche et droite
-prevArrow.addEventListener("click", prevSlide);
-nextArrow.addEventListener("click", nextSlide);
+// LISTENERS
+dotsContainer.addEventListener("click", clickDot)
+prevArrow.addEventListener("click", prevSlide)
+nextArrow.addEventListener("click", nextSlide)
 
-// Restrictions du click droit
+// Restrictions RIGHT CLICK
 bannerContainer.addEventListener("contextmenu", (event) => {
     console.log("right click is not allowed there")
 	event.preventDefault()
 })
+
+//
