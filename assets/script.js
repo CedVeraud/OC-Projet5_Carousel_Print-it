@@ -26,68 +26,77 @@ const prevArrow = document.querySelector(".arrow_left")
 const nextArrow = document.querySelector(".arrow_right")
 
 //-- INDEX
-let currentSlide = 0
+let currentSlide = 0 // on part de [zéro] = premier élément du tableau
 
 //-- SLIDES
-function updateSlide(index) {    
-    const slide = slides[index]
-    bannerImg.src = `./assets/images/slideshow/${slide.image}`
-    tagLine.innerHTML = slide.tagLine
-	
-	const dots = dotsContainer.querySelectorAll(".dot")
-	dots.forEach((dot, dotIndex) => {
-		if (dotIndex === index) {
-			dot.classList.add("dot_selected")			
-		} else {
-			dot.classList.remove("dot_selected")
+function updateSlide(index) {   // récupère la valeur à indexer pour currentSlide
+    const slide = slides[index] // Défini la slide actuelle 
+    bannerImg.src = `./assets/images/slideshow/${slide.image}` // construit l'indexage de la balise img - utilisation des backticks pour pouvoir appeler la variable slide.image
+    tagLine.innerHTML = slide.tagLine // récupère les donnée de tagline dans le tableau
+
+	// update DOT_SELECTED
+	const dots = dotsContainer.querySelectorAll(".dot") // sélection de l'élément .dot (voir fonction createDots)
+	dots.forEach((dot, dotIndex) => { // pour chaque element dot on va définir sa valeur et la comparer à l'indexage de la slide
+		if (dotIndex === index) { // si dotIndex est égal à l'index on ajoute la classe
+			dot.classList.add("dot_selected")	
+		} else { // sinon on la retire
+			dot.classList.remove("dot_selected")		
 		}
 	}) 
 } 
 
 // create DOTS
-function createDots() {
-	for (let i=0; i < slides.length; i++) {
-		let dotElement = document.createElement("a")
-		dotElement.href = '#'
-		dotElement.classList.add("dot")
+function createDots() { // ajoute le nombre de points en fonction de la longueur du tableau slides
+	for (let i=0; i < slides.length; i++) { // variable i est inférieur à la longueur du tableau > on incrémente jusqu'à la fin
+		let dotElement = document.createElement("a") // création de la balise enfant
+		dotElement.href = '#' // lien href
+		dotElement.classList.add("dot") // ajout de la class dot
 
-		dotsContainer.appendChild(dotElement)
+		// click sur les dots
+		dotElement.addEventListener("click", () => { // écoute du click sur l'element dot
+			updateSlide(i) // on sélectionne le numero du slide 
+			currentSlide = i // on actualise le slide
+		   })
+
+		dotsContainer.appendChild(dotElement) // création des éléments enfants de dotsContainer
 	}
 }
-createDots() //
+createDots() // activation de la fonction
 
 // next Slide
-function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length
-    updateSlide(currentSlide)
-}
+function nextSlide() { // fonction slide suivante en boucle
+    currentSlide = (currentSlide + 1) % slides.length // slide actuel + 1 - comparé à la longueur restante
+    updateSlide(currentSlide) // actualisation currentSlide
 
+}
 // prev Slide
-function prevSlide() {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length
-    updateSlide(currentSlide)
+function prevSlide() { // fonction slide précédente en boucle
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length // (slide actuelle - 1 + longueur totale) comparé à la longueur restante
+    updateSlide(currentSlide) // actualisation currentSlide
 }
-
-// !! click on dots - A REVOIR, NE FONCTIONNE PAS !!
-function dotSlide() {
-	for (let i=0; i < slides.length; i++) {
-			updateSlide(i)
-			console.log('hey')
-		}  
-	
-}
-// DOTS LISTENER
-const dotElements = document.querySelector('.dots')
-dotElements.addEventListener("click", dotSlide)
 
 // ARROWS LISTENERS
-prevArrow.addEventListener("click", prevSlide)
-nextArrow.addEventListener("click", nextSlide)
+prevArrow.addEventListener("click", prevSlide) // on écoute le click sur la fleche gauche et on déclenche la fonction
+nextArrow.addEventListener("click", nextSlide) // on écoute le click sur la fleche droite et on déclenche la fonction
 
-// Restrictions RIGHT CLICK
-bannerContainer.addEventListener("contextmenu", (event) => {
+// (option) Restrictions RIGHT CLICK
+bannerContainer.addEventListener("contextmenu", (event) => { // 
     console.log("right click is not allowed there")
 	event.preventDefault()
 })
 
-updateSlide(currentSlide) // 
+// (option) apparition de la 1ère image >>> [A FAIRE] essayer d'ajouter un fondu entre les slides
+ function transitionSlides() {
+	bannerImg.style.opacity = '1'
+	bannerImg.style.transition = 'opacity 0.7s ease-in-out'
+}
+transitionSlides()
+
+// (option) Défilement automatique >>> [A FAIRE] arrêter quand le pointeur survole la banniere
+function autoSlides() {
+	currentSlide = (currentSlide - 1) + setInterval(nextSlide, 7000) // comme la fonction est nextSlide elle envoie [1] au lieu de [0] > je pars de la slide précédente
+}
+
+autoSlides() // activation du défilement automatique
+updateSlide(currentSlide) // initialise le premier slide
+
