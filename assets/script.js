@@ -8,7 +8,15 @@ const slides = [
 		"tagLine":"Tirages haute définition grand format <span>pour vos bureaux et events</span>"
 	},
 	{
-		"image":"slide3.jpg",
+		"image":"slide3a.jpg",
+		"tagLine":"Grand choix de couleurs <span>de CMJN aux pantones</span>"
+	},
+	{
+		"image":"slide3b.jpg",
+		"tagLine":"Grand choix de couleurs <span>de CMJN aux pantones</span>"
+	},
+	{
+		"image":"slide3c.jpg",
 		"tagLine":"Grand choix de couleurs <span>de CMJN aux pantones</span>"
 	},
 	{
@@ -29,62 +37,61 @@ const nextArrow = document.querySelector(".arrow_right")
 let currentSlide = 0
 
 
-// create DOTS
-function createDots() { // ajoute le nombre de points en fonction de la longueur du tableau slides
-	for (let i=0; i < slides.length; i++) { // variable i est inférieur à la longueur du tableau > on incrémente jusqu'à la fin
+// create DOTS >>  Ajoute le nombre de points en fonction de la longueur du tableau
+function createDots() { 
+	for (let i=0; i < slides.length; i++) {
 		let dotElement = document.createElement("a")
 		dotElement.href = '#'
 		dotElement.classList.add("dot")
-		// click sur les dots
-		dotElement.addEventListener("click", () => { // écoute du click sur l'element dot
+		// dot LISTENERS
+		dotElement.addEventListener("click", () => {
 			updateSlide(i)
 			currentSlide = i
 		   })
-
 		dotsContainer.appendChild(dotElement)
 	}
 }
 
-//-- SLIDES
-function updateSlide(index) {   // récupère la valeur à indexer pour currentSlide
-    const slide = slides[index] // Défini la slide actuelle 
-    bannerImg.src = `./assets/images/slideshow/${slide.image}` // utilisation des backticks pour pouvoir appeler la variable slide.image
+//-- gestion des SLIDES >> selectionne la slide active et récupère les données du tableau
+function updateSlide(index) {
+    const slide = slides[index]
+    bannerImg.src = `./assets/images/slideshow/${slide.image}`
     tagLine.innerHTML = slide.tagLine 
 
-	// update DOT_SELECTED
-	const dots = dotsContainer.querySelectorAll(".dot") // sélection de l'élément .dot (voir fonction createDots)
-	dots.forEach((dot, dotIndex) => { // pour chaque element dot on va définir sa valeur et la comparer à l'indexage de la slide
-		if (dotIndex === index) { // si dotIndex est égal à l'index on ajoute la classe
+	// update DOT_SELECTED >> Ajoute ou retire la class .dot_selected si le point est actif ou non
+	const dots = dotsContainer.querySelectorAll(".dot")
+	dots.forEach((dot, dotIndex) => {
+		if (dotIndex === index) { 
 			dot.classList.add("dot_selected")
 
-		} else { // sinon on la retire
+		} else {
 			dot.classList.remove("dot_selected")
 		}
 	}) 	
 } 
 
-// next Slide
-function nextSlide() {
-    currentSlide = (currentSlide + 1) % slides.length // slide actuel + 1 - comparé à la longueur restante
-	updateSlide(currentSlide)
-}
-// prev Slide
-function prevSlide() {
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length // (slide actuelle - 1 + longueur totale) comparé à la longueur restante
-    updateSlide(currentSlide)
-}
+	// next Slide >> 
+	function nextSlide() {
+		currentSlide = (currentSlide + 1) % slides.length
+		updateSlide(currentSlide)
+	}
+	// prev Slide >> 
+	function prevSlide() {
+		currentSlide = (currentSlide - 1 + slides.length) % slides.length
+		updateSlide(currentSlide)
+	}
 
 // ARROWS LISTENERS
 prevArrow.addEventListener("click", prevSlide) 
 nextArrow.addEventListener("click", nextSlide) 
 
 // Restrictions RIGHT CLICK
-bannerContainer.addEventListener("contextmenu", (event) => { // 
+bannerContainer.addEventListener("contextmenu", (event) => {
     console.log("right click is not allowed there")
 	event.preventDefault()
 })
 
-// autoSlide
+// AUTOSLIDE
 let interval = 0;    
 
 	function autoSlide() {
@@ -94,30 +101,18 @@ let interval = 0;
 		clearInterval(interval);
 	}
 
-	// pause on mouseover
+	// pause on mouseover // play on mouseout
 	[prevArrow, nextArrow, dotsContainer].forEach(item => {
 		item.addEventListener('mouseover', () => {
 			pauseAutoSlide()
-			console.log("pause")
 
 			})
 		item.addEventListener('mouseout', () => {
 			autoSlide()
-			console.log("play")
-
 			})
 	})
 
-/*
- (option) apparition de la 1ère image >>> [A FAIRE] essayer d'ajouter un fondu entre les slides
- function transitionSlides() {
-	bannerImg.style.opacity = '1'
-	bannerImg.style.transition = 'opacity 0.7s ease-in-out'
-} 
-	transitionSlides()
-*/
-
 createDots()
-updateSlide(currentSlide) 
+updateSlide(currentSlide)
 autoSlide()
 
