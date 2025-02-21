@@ -25,7 +25,7 @@ const slides = [
 	}
 ]
 
-//-- SELECTORS
+//-- SELECTORS >> Récupération des éléments HTML
 const bannerContainer = document.getElementById("banner")
 const bannerImg = document.querySelector(".banner-img")
 const tagLine = document.querySelector("#banner p")
@@ -33,7 +33,7 @@ const dotsContainer = document.querySelector('.dots')
 const prevArrow = document.querySelector(".arrow_left")
 const nextArrow = document.querySelector(".arrow_right")
 
-//-- INDEX
+//-- INDEX >> sélectionne l'index [0] du tableau 
 let currentSlide = 0
 
 
@@ -52,13 +52,14 @@ function createDots() {
 	}
 }
 
-//-- gestion des SLIDES >> selectionne la slide active et récupère les données du tableau
+// gestion des SLIDES >> Récupère et affiche la slide active (currentSlide)
 function updateSlide(index) {
     const slide = slides[index]
     bannerImg.src = `./assets/images/slideshow/${slide.image}`
     tagLine.innerHTML = slide.tagLine 
+	// console.log(currentSlide)
 
-	// update DOT_SELECTED >> Ajoute ou retire la class .dot_selected si le point est actif ou non
+	// update du point actif >> Ajoute ou retire la class .dot_selected si le point est actif ou non
 	const dots = dotsContainer.querySelectorAll(".dot")
 	dots.forEach((dot, dotIndex) => {
 		if (dotIndex === index) { 
@@ -70,22 +71,22 @@ function updateSlide(index) {
 	}) 	
 } 
 
-	// next Slide >> 
-	function nextSlide() {
-		currentSlide = (currentSlide + 1) % slides.length
-		updateSlide(currentSlide)
-	}
-	// prev Slide >> 
-	function prevSlide() {
-		currentSlide = (currentSlide - 1 + slides.length) % slides.length
-		updateSlide(currentSlide)
-	}
+// next Slide 
+function nextSlide() {
+	currentSlide = (currentSlide + 1) % slides.length
+	updateSlide(currentSlide)
+}
+// prev Slide 
+function prevSlide() {
+	currentSlide = (currentSlide - 1 + slides.length) % slides.length
+	updateSlide(currentSlide)
+}
 
-// ARROWS LISTENERS
+//-- L'écoute du click sur les flèches gauche / droite déclenche les fonctions correspondantes
 prevArrow.addEventListener("click", prevSlide) 
 nextArrow.addEventListener("click", nextSlide) 
 
-// Restrictions RIGHT CLICK
+//-- Restrictions RIGHT CLICK
 bannerContainer.addEventListener("contextmenu", (event) => {
     console.log("right click is not allowed there")
 	event.preventDefault()
@@ -101,11 +102,10 @@ let interval = 0;
 		clearInterval(interval);
 	}
 
-	// pause on mouseover // play on mouseout
+	// pause on mouseover // play on mouseout sur tous les éléments de navigation
 	[prevArrow, nextArrow, dotsContainer].forEach(item => {
 		item.addEventListener('mouseover', () => {
 			pauseAutoSlide()
-
 			})
 		item.addEventListener('mouseout', () => {
 			autoSlide()
